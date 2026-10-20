@@ -60,20 +60,32 @@
     <h1>Formulir Dokumentasi</h1>
     <p>Isi data dokumentasi di bawah ini.</p>
 
-    <form id="formDokumentasi">
-      <label for="nama">Nama petugas</label>
-      <input id="nama" name="nama" required>
+   
+<form id="formDokumentasi">
+  <label for="nama">Nama petugas</label>
+  <input id="nama" name="nama" required>
 
-      <label for="tanggal">Tanggal dokumentasi</label>
-      <input id="tanggal" name="tanggal" type="date" required>
+  <label for="tanggal">Tanggal dokumentasi</label>
+  <input id="tanggal" name="tanggal" type="date" required>
 
-      <label for="keterangan">Keterangan</label>
-      <textarea id="keterangan" name="keterangan" rows="4"
-        required></textarea>
+  <label for="keterangan">Keterangan</label>
+  <textarea id="keterangan" name="keterangan" rows="4"
+    required></textarea>
 
-      <button type="submit">Simpan data</button>
-      <p id="status" role="status"></p>
-    </form>
+  <label for="foto">Foto dokumentasi</label>
+  <input
+    id="foto"
+    name="foto"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    required
+  >
+
+  <button type="submit">Simpan data</button>
+  <p id="status" role="status"></p>
+</form>
+
   </div>
 
   
