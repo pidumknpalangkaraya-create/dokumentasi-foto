@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Dokumentasi</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f3f6fa;
+      color: #202b3c;
+    }
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px #00000012;
+    }
+
+    h1 { font-size: 24px; }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font: inherit;
+      border-radius: 8px;
+    }
+
+    input, textarea { border: 1px solid #ccd3df; }
+
+    button {
+      border: 0;
+      background: #1769e0;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:disabled { opacity: .6; }
+
+    #status { margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Formulir Dokumentasi</h1>
+    <p>Isi data dokumentasi di bawah ini.</p>
+
+    <form id="formDokumentasi">
+      <label for="nama">Nama petugas</label>
+      <input id="nama" name="nama" required>
+
+      <label for="tanggal">Tanggal dokumentasi</label>
+      <input id="tanggal" name="tanggal" type="date" required>
+
+      <label for="keterangan">Keterangan</label>
+      <textarea id="keterangan" name="keterangan" rows="4"
+        required></textarea>
+
+      <button type="submit">Simpan data</button>
+      <p id="status" role="status"></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formDokumentasi")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+        document.getElementById("status").textContent =
+          "Tampilan formulir berhasil digunakan. Penyimpanan ke Google Sheets belum dihubungkan.";
+      });
+  </script>
+</body>
+</html>
