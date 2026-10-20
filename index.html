@@ -76,13 +76,55 @@
     </form>
   </div>
 
-  <script>
-    document.getElementById("formDokumentasi")
-      .addEventListener("submit", function(event) {
-        event.preventDefault();
-        document.getElementById("status").textContent =
-          "Tampilan formulir berhasil digunakan. Penyimpanan ke Google Sheets belum dihubungkan.";
-      });
-  </script>
+  
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsQix9N4xB3VattPQOlSOkzNdCyKP9jNOCK_fhiycVC3xOatGiZVTPkC3GLcC-pa0F/exec";
+
+  document
+    .getElementById("formDokumentasi")
+    .addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const form = event.currentTarget;
+      const status = document.getElementById("status");
+      const button = form.querySelector('button[type="submit"]');
+
+      const data = {
+        nama: form.nama.value.trim(),
+        tanggal: form.tanggal.value,
+        keterangan: form.keterangan.value.trim()
+      };
+
+      if (!data.nama || !data.tanggal || !data.keterangan) {
+        status.textContent = "Mohon lengkapi semua kolom.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Mengirim data...";
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(data)
+        });
+
+        status.textContent =
+          "Permintaan dikirim. Periksa Google Sheets untuk memastikan data tersimpan.";
+        form.reset();
+
+      } catch (error) {
+        status.textContent =
+          "Pengiriman gagal. Periksa koneksi internet dan URL Web App.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+</script>
+
 </body>
 </html>
