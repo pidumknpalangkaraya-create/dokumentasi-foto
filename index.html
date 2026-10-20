@@ -89,6 +89,7 @@
   </div>
 
   
+
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrXWn6k_g8m8OeRTcupYKpfaxFHDktiYaXi0r1XZc6CSRH7Y9o_bAnKNMhRfunPM7a/exec";
 
@@ -100,6 +101,8 @@
       const form = event.currentTarget;
       const status = document.getElementById("status");
       const button = form.querySelector('button[type="submit"]');
+      const fileInput = document.getElementById("foto");
+      const file = fileInput.files[0];
 
       const data = {
         nama: form.nama.value.trim(),
@@ -112,10 +115,48 @@
         return;
       }
 
+      if (!file) {
+        status.textContent = "Silakan pilih foto dokumentasi.";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        status.textContent = "File harus berupa gambar.";
+        return;
+      }
+
+      // Batasi ukuran foto agar pengiriman lebih ringan.
+      if (file.size > 5 * 1024 * 1024) {
+        status.textContent =
+          "Ukuran foto terlalu besar. Pilih foto maksimal 5 MB.";
+        return;
+      }
+
       button.disabled = true;
-      status.textContent = "Mengirim data...";
+      status.textContent = "Membaca foto...";
 
       try {
+        const fotoBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const hasil = reader.result;
+            resolve(hasil.split(",")[1]);
+          };
+
+          reader.onerror = () => reject(
+            new Error("Foto gagal dibaca.")
+          );
+
+          reader.readAsDataURL(file);
+        });
+
+        data.fotoBase64 = fotoBase64;
+        data.fotoNama = file.name;
+        data.fotoMimeType = file.type || "image/jpeg";
+
+        status.textContent = "Mengirim data dan foto...";
+
         await fetch(SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
@@ -126,17 +167,19 @@
         });
 
         status.textContent =
-          "Permintaan dikirim. Periksa Google Sheets untuk memastikan data tersimpan.";
+          "Permintaan dikirim. Periksa Google Sheets dan Google Drive untuk memastikan data serta foto tersimpan.";
+
         form.reset();
 
       } catch (error) {
         status.textContent =
-          "Pengiriman gagal. Periksa koneksi internet dan URL Web App.";
+          "Pengiriman gagal: " + error.message;
       } finally {
         button.disabled = false;
       }
     });
 </script>
+
 
 </body>
 </html>
